@@ -55,7 +55,7 @@ const CanvasContainer = ({ model, color }) => {
             ) : (
               <Model2 scale={2} position={[0, 0, 0]} color={color} />
             )}
-            <OrbitControls enableZoom={true} />
+            <OrbitControls enableZoom={false} />
           </group>
         </Suspense>
       </Canvas>
