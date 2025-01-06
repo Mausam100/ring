@@ -1,60 +1,52 @@
 import { Canvas } from "@react-three/fiber";
-import Model1 from "./Model1";
-import Model2 from "./Model2";
+import Model from "./Model2";
 import { Suspense } from "react";
+import { OrbitControls, Environment} from "@react-three/drei";
 
-import {
-  OrbitControls,
-  Environment,
-} from "@react-three/drei";
-
-const CanvasContainer = ({ model, color }) => {
+const CanvasContainer = ({ metalType }) => {
   return (
-    <div className="sm:w-1/2 w-full h-[80vh] sm:h-full">
+    <div className="w-full h-[80vh] sm:h-full">
       <Canvas
         className="w-full h-full"
         camera={{
           position: [0, 0, 5],
-          fov: window.innerWidth > 768 ? 60 : 90 // Adjusts FOV based on device width
+          fov: window.innerWidth > 768 ? 60 : 90, // Adjusts FOV based on device width
         }}
         shadows
       >
-        {/* Global Ambient Light */}
-        <ambientLight intensity={0.4} />
+        {/* General ambient light */}
+        
 
-        {/* Spotlights for highlights */}
-        <spotLight
-          position={[5, 10, 10]}
-          angle={0.3}
-          penumbra={1}
-          intensity={2}
-          castShadow
-        />
-        <spotLight
-          position={[-5, 10, -10]}
-          angle={0.3}
-          penumbra={1}
-          intensity={1.5}
+        {/* Soft main directional light */}
+        <spotLight 
+          position={[5, 5, 2]} 
+          angle={0.15} 
+          penumbra={0.5} 
+          intensity={0.8} 
+          color={"#FFFFFF"} 
           castShadow
         />
 
-        {/* Fill Light for softer shadows */}
-        <directionalLight
-          position={[0, 5, 5]}
-          intensity={1}
-          castShadow
+        {/* Fill light to soften shadows */}
+        <pointLight 
+          position={[-5, -5, -2]} 
+          intensity={0.5} 
+          color={"#FFFFFF"} 
+        />
+
+        {/* Additional Hemisphere light for a softer, uniform fill */}
+        <hemisphereLight 
+          skyColor={0xffffff} // Light blue sky
+          groundColor={0x555555} // Dark gray ground
+          intensity={0.1} 
         />
 
         {/* Environment for realistic reflections */}
-        <Environment preset="city" />
+        <Environment files="/studio.hdr" />
 
         <Suspense fallback={null}>
           <group>
-            {model === "Model1" ? (
-              <Model1 scale={1} position={[0, 2, 0]} color={color} />
-            ) : (
-              <Model2 scale={2} position={[0, 0, 0]} color={color} />
-            )}
+            <Model scale={2} position={[0, 0, 0]} metalType={metalType} />
             <OrbitControls enableZoom={false} />
           </group>
         </Suspense>
