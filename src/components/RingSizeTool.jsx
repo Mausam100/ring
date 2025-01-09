@@ -61,26 +61,8 @@ const RingSizeTool = () => {
         ></div>
       </div>
 
-      {/* Device Details */}
-      <div className="mt-6 text-center">
-        <button
-          onClick={checkDeviceDetails}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-        >
-          Check My Device Details
-        </button>
-
-        {isDetailsChecked && (
-          <div className="mt-4">
-            <p>Screen Resolution: {screenWidth}x{screenHeight} px</p>
-            <p>Device Pixel Ratio (DPR): {devicePixelRatio}</p>
-            <p>Calculated DPI: {dpi.toFixed(1)}</p>
-          </div>
-        )}
-      </div>
-
-      {/* User Input for Screen Size (in inches) */}
-      <div className="mt-6 text-center">
+ {/* User Input for Screen Size (in inches) */}
+ <div className="mt-6 text-center">
         <p className="text-gray-700">Enter your screen size (in inches, diagonal):</p>
         <input
           type="number"
@@ -90,6 +72,25 @@ const RingSizeTool = () => {
           placeholder="Enter screen size"
         />
       </div>
+      {/* Device Details */}
+      <div className="mt-6 text-center">
+        <button
+          onClick={checkDeviceDetails}
+          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        >
+          Check My Device Details
+        </button>
+
+        {/* {isDetailsChecked && (
+          <div className="mt-4">
+            <p>Screen Resolution: {screenWidth}x{screenHeight} px</p>
+            <p>Device Pixel Ratio (DPR): {devicePixelRatio}</p>
+            <p>Calculated DPI: {dpi.toFixed(1)}</p>
+          </div>
+        )} */}
+      </div>
+
+     
 
       {/* Slider and Size Display */}
       <div className="mt-8 w-full max-w-lg px-4">
