@@ -1,24 +1,43 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 const RingSizeTool = () => {
-  const [sizeInPixels, setSizeInPixels] = useState(100); // Initial size in pixels
-  const [pixelRatio, setPixelRatio] = useState(1);
+  const [sizeInPixels, setSizeInPixels] = useState(50); // Size in pixels
+  const [dpi, setDpi] = useState(96); // Default DPI (for calibration)
+  const [screenWidth, setScreenWidth] = useState(0);
+  const [screenHeight, setScreenHeight] = useState(0);
+  const [devicePixelRatio, setDevicePixelRatio] = useState(1);
+  const [screenSizeInches, setScreenSizeInches] = useState(""); // User input for screen size
+  const [isDetailsChecked, setIsDetailsChecked] = useState(false);
 
-  useEffect(() => {
-    // Set the device pixel ratio on component mount
-    const ratio = window.devicePixelRatio || 1;
-    setPixelRatio(ratio);
-  }, []);
+  // Function to retrieve device details
+  const checkDeviceDetails = () => {
+    const width = screen.width;
+    const height = screen.height;
+    const dpr = window.devicePixelRatio;
+    
+    // Calculate DPI based on resolution and screen size (if user provides it)
+    if (screenSizeInches) {
+      const diagonalResolution = Math.sqrt(width * width + height * height);
+      const calculatedDpi = diagonalResolution / parseFloat(screenSizeInches);
+      setDpi(calculatedDpi);
+    }
 
-  // Define a reference value for 50mm (as 200px on standard screen)
-  const pixelToMm = 200 / 50; // 50mm = 200px, update based on your reference screen
+    // Set the device details state
+    setScreenWidth(width);
+    setScreenHeight(height);
+    setDevicePixelRatio(dpr);
+    setIsDetailsChecked(true);
+  };
 
   const handleSizeChange = (e) => {
     setSizeInPixels(e.target.value);
   };
 
-  // Convert pixels to millimeters with consideration for device pixel ratio
-  const sizeInMm = ((sizeInPixels / pixelToMm) / pixelRatio).toFixed(1); // Account for pixel ratio
+  const handleScreenSizeChange = (e) => {
+    setScreenSizeInches(e.target.value);
+  };
+
+  const sizeInMm = ((sizeInPixels / dpi) * 25.4).toFixed(1); // Convert pixels to mm
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-50 to-gray-100 p-4">
@@ -31,8 +50,8 @@ const RingSizeTool = () => {
         perfectly inside your ring. The size will be displayed in millimeters.
       </p>
 
-      {/* Fixed Size Box for Ring Measurement */}
-      <div className="relative flex justify-center items-center mt-6 w-[200px] h-[200px] bg-white shadow-xl rounded-lg border border-gray-200">
+      {/* Ring Measuring Container */}
+      <div className="relative flex justify-center items-center mt-6 w-full max-w-md h-72 bg-white shadow-xl rounded-lg border border-gray-200">
         <div
           className="border-4 border-blue-500 rounded-full"
           style={{
@@ -42,10 +61,34 @@ const RingSizeTool = () => {
         ></div>
       </div>
 
-      {/* Graph-like scale for reference */}
-      <div className="flex mt-4 space-x-2 items-center">
-        <div className="w-12 h-2 bg-gray-300"></div> {/* Visual scale */}
-        <div className="text-sm text-gray-600">50mm</div>
+      {/* Device Details */}
+      <div className="mt-6 text-center">
+        <button
+          onClick={checkDeviceDetails}
+          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        >
+          Check My Device Details
+        </button>
+
+        {isDetailsChecked && (
+          <div className="mt-4">
+            <p>Screen Resolution: {screenWidth}x{screenHeight} px</p>
+            <p>Device Pixel Ratio (DPR): {devicePixelRatio}</p>
+            <p>Calculated DPI: {dpi.toFixed(1)}</p>
+          </div>
+        )}
+      </div>
+
+      {/* User Input for Screen Size (in inches) */}
+      <div className="mt-6 text-center">
+        <p className="text-gray-700">Enter your screen size (in inches, diagonal):</p>
+        <input
+          type="number"
+          value={screenSizeInches}
+          onChange={handleScreenSizeChange}
+          className="mt-2 p-2 border border-gray-300 rounded"
+          placeholder="Enter screen size"
+        />
       </div>
 
       {/* Slider and Size Display */}
@@ -53,7 +96,7 @@ const RingSizeTool = () => {
         <input
           type="range"
           min="10"
-          max="200"
+          max="500"
           value={sizeInPixels}
           onChange={handleSizeChange}
           className="w-full appearance-none h-2 bg-blue-300 rounded-lg cursor-pointer"
