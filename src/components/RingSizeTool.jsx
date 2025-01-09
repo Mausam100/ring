@@ -1,13 +1,17 @@
 import React, { useState } from "react";
 
 const RingSizeTool = () => {
-  const [sizeInPixels, setSizeInPixels] = useState(50); // Size of the ring in pixels
+  const [sizeInPixels, setSizeInPixels] = useState(100); // Set initial ring size in pixels
+
+  // 50mm corresponds to 200px. Adjust accordingly if needed.
+  const pixelToMm = 200 / 50; // This means 1mm = 4px (adjust if necessary)
 
   const handleSizeChange = (e) => {
     setSizeInPixels(e.target.value);
   };
 
-  const sizeInMm = ((sizeInPixels / 200) * 50).toFixed(1); // Convert size to mm, assuming 200px = 50mm in real size
+  // Convert the size from pixels to millimeters
+  const sizeInMm = (sizeInPixels / pixelToMm).toFixed(1); // Ensure proper scaling
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-50 to-gray-100 p-4">
@@ -29,6 +33,12 @@ const RingSizeTool = () => {
             height: `${sizeInPixels}px`,
           }}
         ></div>
+      </div>
+
+      {/* Graph-like scale for reference */}
+      <div className="flex mt-4 space-x-2 items-center">
+        <div className="w-12 h-2 bg-gray-300"></div> {/* Visual scale */}
+        <div className="text-sm text-gray-600">50mm</div>
       </div>
 
       {/* Slider and Size Display */}
