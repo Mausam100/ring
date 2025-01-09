@@ -15,7 +15,7 @@ const Home = () => {
   };
 
   return (
-    <main className="w-full h-screen bg-gradient-to-br from-gray-200 via-gray-200 to-gray-300 flex flex-col">
+    <main className="w-full bg-gradient-to-br from-gray-200 via-gray-200 to-gray-300 flex flex-col">
       {/* Navigation Bar */}
       <nav className="w-full p-5 bg-white shadow-lg flex justify-between items-center">
         <div className="flex items-center">
