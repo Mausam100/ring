@@ -1,17 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const RingSizeTool = () => {
-  const [sizeInPixels, setSizeInPixels] = useState(100); // Set initial ring size in pixels
+  const [sizeInPixels, setSizeInPixels] = useState(100); // Initial size in pixels
+  const [pixelRatio, setPixelRatio] = useState(1);
 
-  // 50mm corresponds to 200px. Adjust accordingly if needed.
-  const pixelToMm = 200 / 50; // This means 1mm = 4px (adjust if necessary)
+  useEffect(() => {
+    // Set the device pixel ratio on component mount
+    const ratio = window.devicePixelRatio || 1;
+    setPixelRatio(ratio);
+  }, []);
+
+  // Define a reference value for 50mm (as 200px on standard screen)
+  const pixelToMm = 200 / 50; // 50mm = 200px, update based on your reference screen
 
   const handleSizeChange = (e) => {
     setSizeInPixels(e.target.value);
   };
 
-  // Convert the size from pixels to millimeters
-  const sizeInMm = (sizeInPixels / pixelToMm).toFixed(1); // Ensure proper scaling
+  // Convert pixels to millimeters with consideration for device pixel ratio
+  const sizeInMm = ((sizeInPixels / pixelToMm) / pixelRatio).toFixed(1); // Account for pixel ratio
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-50 to-gray-100 p-4">
