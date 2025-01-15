@@ -81,13 +81,13 @@ const RingSizeTool = () => {
           Start Measurement
         </button>
 
-        {/* {isDetailsChecked && (
+        {isDetailsChecked && (
           <div className="mt-4">
             <p>Screen Resolution: {screenWidth}x{screenHeight} px</p>
             <p>Device Pixel Ratio (DPR): {devicePixelRatio}</p>
             <p>Calculated DPI: {dpi.toFixed(1)}</p>
           </div>
-        )} */}
+        )}
       </div>
 
      
